@@ -1,0 +1,23 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+
+enum UserRole { STUDENT PARENT TEACHER SCHOOL_ADMIN SCHOOL_PRINCIPAL SUPER_ADMIN CONTENT_ADMIN EXAM_ADMIN FINANCE_ADMIN SUPPORT_ADMIN }
+enum TestStatus { DRAFT SCHEDULED LIVE CLOSED PROCESSING PUBLISHED ARCHIVED }
+enum AttemptStatus { IN_PROGRESS SUBMITTED PROCESSING PUBLISHED EXPIRED }
+enum QuestionStatus { DRAFT REVIEW APPROVED PUBLISHED ARCHIVED }
+
+model User { id String @id @default(uuid()) email String? @unique username String @unique passwordHash String roles UserRole[] createdAt DateTime @default(now()) updatedAt DateTime @updatedAt student Student? attempts TestAttempt[] }
+model School { id String @id @default(uuid()) publicId String @unique name String district String state String students Student[] createdAt DateTime @default(now()) }
+model Student { id String @id @default(uuid()) publicId String @unique userId String @unique user User @relation(fields:[userId], references:[id]) schoolId String school School @relation(fields:[schoolId], references:[id]) classLevel Int attempts TestAttempt[] }
+model AcademicYear { id String @id @default(uuid()) name String @unique startsOn DateTime endsOn DateTime tests Test[] }
+model Subject { id String @id @default(uuid()) name String classLevel Int chapters Chapter[] }
+model Chapter { id String @id @default(uuid()) subjectId String subject Subject @relation(fields:[subjectId], references:[id]) name String topics Topic[] }
+model Topic { id String @id @default(uuid()) chapterId String chapter Chapter @relation(fields:[chapterId], references:[id]) name String }
+model Question { id String @id @default(uuid()) text String classLevel Int subjectId String topicId String status QuestionStatus @default(DRAFT) version Int @default(1) options QuestionOption[] createdAt DateTime @default(now()) }
+model QuestionOption { id String @id @default(uuid()) questionId String question Question @relation(fields:[questionId], references:[id]) text String isCorrect Boolean @default(false) position Int }
+model Test { id String @id @default(uuid()) academicYearId String academicYear AcademicYear @relation(fields:[academicYearId], references:[id]) number Int classLevel Int title String status TestStatus @default(DRAFT) startsAt DateTime endsAt DateTime durationMinutes Int attempts TestAttempt[] @@unique([academicYearId, number, classLevel]) }
+model TestAttempt { id String @id @default(uuid()) testId String test Test @relation(fields:[testId], references:[id]) studentId String student Student @relation(fields:[studentId], references:[id]) status AttemptStatus @default(IN_PROGRESS) startedAt DateTime @default(now()) submittedAt DateTime? idempotencyKey String? @unique answers TestAnswer[] result TestResult? @@unique([testId, studentId]) }
+model TestAnswer { id String @id @default(uuid()) attemptId String attempt TestAttempt @relation(fields:[attemptId], references:[id]) questionId String selectedOptionId String? savedAt DateTime @updatedAt @@unique([attemptId, questionId]) }
+model TestResult { id String @id @default(uuid()) attemptId String @unique attempt TestAttempt @relation(fields:[attemptId], references:[id]) score Decimal correct Int incorrect Int unattempted Int accuracy Decimal }
+model RankingSnapshot { id String @id @default(uuid()) testId String version Int publishedAt DateTime? @@unique([testId, version]) }
+model AuditLog { id String @id @default(uuid()) actorId String? action String entityType String entityId String? metadata Json? createdAt DateTime @default(now()) }
