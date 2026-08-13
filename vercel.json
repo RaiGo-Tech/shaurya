@@ -7,7 +7,6 @@
   "installCommand": "npm install --ignore-scripts",
   "framework": null,
   "rewrites": [
-    { "handle": "filesystem" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
