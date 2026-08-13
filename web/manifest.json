@@ -1,13 +1,14 @@
 {
-    "name": "shaurya",
-    "short_name": "shaurya",
+    "name": "Shaurya — Learn. Compete. Conquer.",
+    "short_name": "Shaurya",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#0056D2",
+    "theme_color": "#0056D2",
+    "description": "India's Most Advanced AI-Powered Assessment & Learning Platform.",
+    "orientation": "any",
     "prefer_related_applications": false,
+    "categories": ["education"],
     "icons": [
         {
             "src": "icons/Icon-192.png",

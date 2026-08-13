@@ -1,0 +1,11 @@
+[build]
+  publish = "build/web"
+  command = "echo Skip — Flutter web is built in CI or locally before deploy"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"
