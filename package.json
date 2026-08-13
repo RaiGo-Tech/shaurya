@@ -1,0 +1,7 @@
+{
+  "name": "shaurya-web",
+  "private": true,
+  "scripts": {
+    "vercel-build": "bash scripts/vercel-build.sh"
+  }
+}
