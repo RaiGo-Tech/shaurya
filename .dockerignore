@@ -1,0 +1,15 @@
+.git
+.dart_tool
+build
+**/node_modules
+android
+ios
+linux
+macos
+windows
+web
+lib
+test
+pubspec.yaml
+pubspec.lock
+*.md
