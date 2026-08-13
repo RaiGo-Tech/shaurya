@@ -1,8 +1,9 @@
 {
   "name": "shaurya-web",
   "private": true,
+  "type": "module",
   "scripts": {
-    "vercel-build": "bash scripts/vercel-build.sh"
+    "vercel-build": "node scripts/vercel-build.mjs"
   },
   "engines": {
     "node": ">=18"
