@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo "==> Shaurya Vercel build starting..."
+
+# Vercel needs git for flutter tool
+git config --global --add safe.directory '*' || true
+
 echo "==> Installing Flutter SDK (stable)..."
 FLUTTER_HOME="${HOME}/flutter"
-if [ ! -d "$FLUTTER_HOME/.git" ]; then
+if [ ! -x "$FLUTTER_HOME/bin/flutter" ]; then
   rm -rf "$FLUTTER_HOME"
   git clone https://github.com/flutter/flutter.git -b stable --depth 1 "$FLUTTER_HOME"
 fi
@@ -11,12 +16,18 @@ fi
 export PATH="$FLUTTER_HOME/bin:$PATH"
 flutter --version
 flutter config --enable-web --no-analytics
+flutter precache --web
 
-echo "==> Fetching Dart/Flutter dependencies..."
+echo "==> Fetching dependencies..."
 flutter pub get
 
-echo "==> Building Flutter web (release)..."
+echo "==> Building web release..."
 flutter build web --release
 
-echo "==> Web build output:"
-ls -la build/web
+if [ ! -f "build/web/index.html" ]; then
+  echo "ERROR: build/web/index.html was not created"
+  exit 1
+fi
+
+echo "==> Build successful:"
+ls -la build/web | head -20

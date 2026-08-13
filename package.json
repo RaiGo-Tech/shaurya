@@ -3,5 +3,8 @@
   "private": true,
   "scripts": {
     "vercel-build": "bash scripts/vercel-build.sh"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

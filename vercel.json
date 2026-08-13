@@ -1,33 +1,13 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "name": "shaurya",
-  "buildCommand": "bash scripts/vercel-build.sh",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "build/web",
-  "installCommand": "echo \"Dependencies installed during Flutter build\"",
+  "installCommand": "npm install --ignore-scripts",
   "framework": null,
   "rewrites": [
     { "handle": "filesystem" },
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" }
-      ]
-    },
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/canvaskit/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    }
   ]
 }
